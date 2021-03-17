@@ -1,0 +1,317 @@
+define(['dart_sdk', 'packages/archive/src/util/archive_exception.dart'], (function load__packages__archive__src__util__input_stream_dart(dart_sdk, packages__archive__src__util__archive_exception$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const typed_data = dart_sdk.typed_data;
+  const _interceptors = dart_sdk._interceptors;
+  const convert = dart_sdk.convert;
+  const _native_typed_data = dart_sdk._native_typed_data;
+  const _internal = dart_sdk._internal;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const archive_exception = packages__archive__src__util__archive_exception$46dart.src__util__archive_exception;
+  var input_stream = Object.create(dart.library);
+  var $buffer = dartx.buffer;
+  var $offsetInBytes = dartx.offsetInBytes;
+  var $lengthInBytes = dartx.lengthInBytes;
+  var $length = dartx.length;
+  var $_get = dartx._get;
+  var $add = dartx.add;
+  var $leftShift = dartx['<<'];
+  var $sublist = dartx.sublist;
+  dart._checkModuleNullSafetyMode(false);
+  var T = {
+    ListOfint: () => (T.ListOfint = dart.constFn(core.List$(core.int)))(),
+    JSArrayOfint: () => (T.JSArrayOfint = dart.constFn(_interceptors.JSArray$(core.int)))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  var C = [];
+  var I = [
+    "package:archive/src/util/input_stream.dart",
+    "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.2/lib/src/util/input_stream.dart"
+  ];
+  input_stream.InputStreamBase = class InputStreamBase extends core.Object {};
+  (input_stream.InputStreamBase.new = function() {
+    ;
+  }).prototype = input_stream.InputStreamBase.prototype;
+  dart.addTypeTests(input_stream.InputStreamBase);
+  dart.addTypeCaches(input_stream.InputStreamBase);
+  dart.setLibraryUri(input_stream.InputStreamBase, I[0]);
+  var buffer = dart.privateName(input_stream, "InputStream.buffer");
+  var offset = dart.privateName(input_stream, "InputStream.offset");
+  var start$ = dart.privateName(input_stream, "InputStream.start");
+  var byteOrder$ = dart.privateName(input_stream, "InputStream.byteOrder");
+  var __InputStream__length = dart.privateName(input_stream, "_#InputStream#_length");
+  var __InputStream__length_isSet = dart.privateName(input_stream, "_#InputStream#_length#isSet");
+  var _length = dart.privateName(input_stream, "_length");
+  input_stream.InputStream = class InputStream extends input_stream.InputStreamBase {
+    get buffer() {
+      return this[buffer];
+    }
+    set buffer(value) {
+      this[buffer] = value;
+    }
+    get offset() {
+      return this[offset];
+    }
+    set offset(value) {
+      this[offset] = value;
+    }
+    get start() {
+      return this[start$];
+    }
+    set start(value) {
+      this[start$] = value;
+    }
+    get byteOrder() {
+      return this[byteOrder$];
+    }
+    set byteOrder(value) {
+      this[byteOrder$] = value;
+    }
+    get position() {
+      return dart.notNull(this.offset) - dart.notNull(this.start);
+    }
+    get length() {
+      return dart.notNull(this[_length]) - (dart.notNull(this.offset) - dart.notNull(this.start));
+    }
+    get isEOS() {
+      return dart.notNull(this.offset) >= dart.notNull(this.start) + dart.notNull(this[_length]);
+    }
+    reset() {
+      this.offset = this.start;
+    }
+    rewind(length = 1) {
+      if (length == null) dart.nullFailed(I[1], 103, 20, "length");
+      this.offset = dart.notNull(this.offset) - dart.notNull(length);
+      if (dart.notNull(this.offset) < 0) {
+        this.offset = 0;
+      }
+    }
+    _get(index) {
+      if (index == null) dart.nullFailed(I[1], 111, 23, "index");
+      return this.buffer[$_get](dart.notNull(this.offset) + dart.notNull(index));
+    }
+    subset(position = null, length = null) {
+      if (position == null) {
+        position = this.offset;
+      } else {
+        position = dart.notNull(position) + dart.notNull(this.start);
+      }
+      if (length == null || dart.notNull(length) < 0) {
+        length = dart.notNull(this[_length]) - (dart.notNull(position) - dart.notNull(this.start));
+      }
+      return new input_stream.InputStream.new(this.buffer, {byteOrder: this.byteOrder, start: position, length: length});
+    }
+    indexOf(value, offset = 0) {
+      if (value == null) dart.nullFailed(I[1], 137, 19, "value");
+      if (offset == null) dart.nullFailed(I[1], 137, 31, "offset");
+      for (let i = dart.notNull(this.offset) + dart.notNull(offset), end = dart.notNull(this.offset) + dart.notNull(this.length); i < end; i = i + 1) {
+        if (this.buffer[$_get](i) == value) {
+          return i - dart.notNull(this.start);
+        }
+      }
+      return -1;
+    }
+    peekBytes(count, offset = 0) {
+      if (count == null) dart.nullFailed(I[1], 151, 29, "count");
+      if (offset == null) dart.nullFailed(I[1], 151, 41, "offset");
+      return this.subset(dart.notNull(this.offset) - dart.notNull(this.start) + dart.notNull(offset), count);
+    }
+    skip(count) {
+      if (count == null) dart.nullFailed(I[1], 157, 17, "count");
+      this.offset = dart.notNull(this.offset) + dart.notNull(count);
+    }
+    readByte() {
+      let t0;
+      return this.buffer[$_get]((t0 = this.offset, this.offset = dart.notNull(t0) + 1, t0));
+    }
+    readBytes(count) {
+      if (count == null) dart.nullFailed(I[1], 169, 29, "count");
+      let bytes = this.subset(dart.notNull(this.offset) - dart.notNull(this.start), count);
+      this.offset = dart.notNull(this.offset) + dart.notNull(bytes.length);
+      return bytes;
+    }
+    readString(opts) {
+      let size = opts && 'size' in opts ? opts.size : null;
+      let utf8 = opts && 'utf8' in opts ? opts.utf8 : true;
+      if (utf8 == null) dart.nullFailed(I[1], 178, 38, "utf8");
+      if (size == null) {
+        let codes = T.JSArrayOfint().of([]);
+        if (dart.test(this.isEOS)) {
+          return "";
+        }
+        while (!dart.test(this.isEOS)) {
+          let c = this.readByte();
+          if (c === 0) {
+            return dart.test(utf8) ? new convert.Utf8Decoder.new().convert(codes) : core.String.fromCharCodes(codes);
+          }
+          codes[$add](c);
+        }
+        dart.throw(new archive_exception.ArchiveException.new("EOF reached without finding string terminator"));
+      }
+      let s = this.readBytes(size);
+      let bytes = s.toUint8List();
+      let str = dart.test(utf8) ? new convert.Utf8Decoder.new().convert(bytes) : core.String.fromCharCodes(bytes);
+      return str;
+    }
+    readUint16() {
+      let t0, t0$;
+      let b1 = dart.notNull(this.buffer[$_get]((t0 = this.offset, this.offset = dart.notNull(t0) + 1, t0))) & 255;
+      let b2 = dart.notNull(this.buffer[$_get]((t0$ = this.offset, this.offset = dart.notNull(t0$) + 1, t0$))) & 255;
+      if (this.byteOrder === 1) {
+        return (b1 << 8 | b2) >>> 0;
+      }
+      return (b2 << 8 | b1) >>> 0;
+    }
+    readUint24() {
+      let t0, t0$, t0$0;
+      let b1 = dart.notNull(this.buffer[$_get]((t0 = this.offset, this.offset = dart.notNull(t0) + 1, t0))) & 255;
+      let b2 = dart.notNull(this.buffer[$_get]((t0$ = this.offset, this.offset = dart.notNull(t0$) + 1, t0$))) & 255;
+      let b3 = dart.notNull(this.buffer[$_get]((t0$0 = this.offset, this.offset = dart.notNull(t0$0) + 1, t0$0))) & 255;
+      if (this.byteOrder === 1) {
+        return (b3 | b2 << 8 >>> 0 | b1 << 16 >>> 0) >>> 0;
+      }
+      return (b1 | b2 << 8 >>> 0 | b3 << 16 >>> 0) >>> 0;
+    }
+    readUint32() {
+      let t0, t0$, t0$0, t0$1;
+      let b1 = dart.notNull(this.buffer[$_get]((t0 = this.offset, this.offset = dart.notNull(t0) + 1, t0))) & 255;
+      let b2 = dart.notNull(this.buffer[$_get]((t0$ = this.offset, this.offset = dart.notNull(t0$) + 1, t0$))) & 255;
+      let b3 = dart.notNull(this.buffer[$_get]((t0$0 = this.offset, this.offset = dart.notNull(t0$0) + 1, t0$0))) & 255;
+      let b4 = dart.notNull(this.buffer[$_get]((t0$1 = this.offset, this.offset = dart.notNull(t0$1) + 1, t0$1))) & 255;
+      if (this.byteOrder === 1) {
+        return (b1 << 24 | b2 << 16 >>> 0 | b3 << 8 >>> 0 | b4) >>> 0;
+      }
+      return (b4 << 24 | b3 << 16 >>> 0 | b2 << 8 >>> 0 | b1) >>> 0;
+    }
+    readUint64() {
+      let t0, t0$, t0$0, t0$1, t0$2, t0$3, t0$4, t0$5;
+      let b1 = dart.notNull(this.buffer[$_get]((t0 = this.offset, this.offset = dart.notNull(t0) + 1, t0))) & 255;
+      let b2 = dart.notNull(this.buffer[$_get]((t0$ = this.offset, this.offset = dart.notNull(t0$) + 1, t0$))) & 255;
+      let b3 = dart.notNull(this.buffer[$_get]((t0$0 = this.offset, this.offset = dart.notNull(t0$0) + 1, t0$0))) & 255;
+      let b4 = dart.notNull(this.buffer[$_get]((t0$1 = this.offset, this.offset = dart.notNull(t0$1) + 1, t0$1))) & 255;
+      let b5 = dart.notNull(this.buffer[$_get]((t0$2 = this.offset, this.offset = dart.notNull(t0$2) + 1, t0$2))) & 255;
+      let b6 = dart.notNull(this.buffer[$_get]((t0$3 = this.offset, this.offset = dart.notNull(t0$3) + 1, t0$3))) & 255;
+      let b7 = dart.notNull(this.buffer[$_get]((t0$4 = this.offset, this.offset = dart.notNull(t0$4) + 1, t0$4))) & 255;
+      let b8 = dart.notNull(this.buffer[$_get]((t0$5 = this.offset, this.offset = dart.notNull(t0$5) + 1, t0$5))) & 255;
+      if (this.byteOrder === 1) {
+        return (b1[$leftShift](56) | b2[$leftShift](48) | b3[$leftShift](40) | b4[$leftShift](32) | b5 << 24 >>> 0 | b6 << 16 >>> 0 | b7 << 8 >>> 0 | b8) >>> 0;
+      }
+      return (b8[$leftShift](56) | b7[$leftShift](48) | b6[$leftShift](40) | b5[$leftShift](32) | b4 << 24 >>> 0 | b3 << 16 >>> 0 | b2 << 8 >>> 0 | b1) >>> 0;
+    }
+    toUint8List() {
+      let len = this.length;
+      if (typed_data.Uint8List.is(this.buffer)) {
+        let b = typed_data.Uint8List.as(this.buffer);
+        if (dart.notNull(this.offset) + dart.notNull(len) > dart.notNull(b[$length])) {
+          len = dart.notNull(b[$length]) - dart.notNull(this.offset);
+        }
+        let bytes = typed_data.Uint8List.view(b[$buffer], dart.notNull(b[$offsetInBytes]) + dart.notNull(this.offset), len);
+        return bytes;
+      }
+      let end = dart.notNull(this.offset) + dart.notNull(len);
+      if (dart.notNull(end) > dart.notNull(this.buffer[$length])) {
+        end = this.buffer[$length];
+      }
+      return _native_typed_data.NativeUint8List.fromList(this.buffer[$sublist](this.offset, end));
+    }
+    get [_length]() {
+      let t0;
+      return dart.test(this[__InputStream__length_isSet]) ? (t0 = this[__InputStream__length], t0) : dart.throw(new _internal.LateError.fieldNI("_length"));
+    }
+    set [_length](t0) {
+      if (t0 == null) dart.nullFailed(I[1], 288, 12, "null");
+      this[__InputStream__length_isSet] = true;
+      this[__InputStream__length] = t0;
+    }
+  };
+  (input_stream.InputStream.new = function(data, opts) {
+    let t0;
+    let byteOrder = opts && 'byteOrder' in opts ? opts.byteOrder : 0;
+    if (byteOrder == null) dart.nullFailed(I[1], 63, 13, "byteOrder");
+    let start = opts && 'start' in opts ? opts.start : 0;
+    if (start == null) dart.nullFailed(I[1], 63, 44, "start");
+    let length = opts && 'length' in opts ? opts.length : null;
+    this[__InputStream__length] = null;
+    this[__InputStream__length_isSet] = false;
+    this[byteOrder$] = byteOrder;
+    this[buffer] = typed_data.TypedData.is(data) ? typed_data.Uint8List.view(data[$buffer], data[$offsetInBytes], data[$lengthInBytes]) : T.ListOfint().is(data) ? data : T.ListOfint().from(core.Iterable.as(data));
+    this[offset] = start;
+    this[start$] = start;
+    this[_length] = (t0 = length, t0 == null ? this.buffer[$length] : t0);
+  }).prototype = input_stream.InputStream.prototype;
+  (input_stream.InputStream.from = function(other) {
+    if (other == null) dart.nullFailed(I[1], 76, 32, "other");
+    this[__InputStream__length] = null;
+    this[__InputStream__length_isSet] = false;
+    this[buffer] = other.buffer;
+    this[offset] = other.offset;
+    this[start$] = other.start;
+    this[__InputStream__length_isSet] = true;
+    this[__InputStream__length] = other[_length];
+    this[byteOrder$] = other.byteOrder;
+    ;
+  }).prototype = input_stream.InputStream.prototype;
+  dart.addTypeTests(input_stream.InputStream);
+  dart.addTypeCaches(input_stream.InputStream);
+  dart.setMethodSignature(input_stream.InputStream, () => ({
+    __proto__: dart.getMethods(input_stream.InputStream.__proto__),
+    reset: dart.fnType(dart.void, []),
+    rewind: dart.fnType(dart.void, [], [core.int]),
+    _get: dart.fnType(core.int, [core.int]),
+    subset: dart.fnType(input_stream.InputStream, [], [dart.nullable(core.int), dart.nullable(core.int)]),
+    indexOf: dart.fnType(core.int, [core.int], [core.int]),
+    peekBytes: dart.fnType(input_stream.InputStream, [core.int], [core.int]),
+    skip: dart.fnType(dart.void, [core.int]),
+    readByte: dart.fnType(core.int, []),
+    readBytes: dart.fnType(input_stream.InputStream, [core.int]),
+    readString: dart.fnType(core.String, [], {size: dart.nullable(core.int), utf8: core.bool}, {}),
+    readUint16: dart.fnType(core.int, []),
+    readUint24: dart.fnType(core.int, []),
+    readUint32: dart.fnType(core.int, []),
+    readUint64: dart.fnType(core.int, []),
+    toUint8List: dart.fnType(typed_data.Uint8List, [])
+  }));
+  dart.setGetterSignature(input_stream.InputStream, () => ({
+    __proto__: dart.getGetters(input_stream.InputStream.__proto__),
+    position: core.int,
+    length: core.int,
+    isEOS: core.bool,
+    [_length]: core.int
+  }));
+  dart.setSetterSignature(input_stream.InputStream, () => ({
+    __proto__: dart.getSetters(input_stream.InputStream.__proto__),
+    [_length]: core.int
+  }));
+  dart.setLibraryUri(input_stream.InputStream, I[0]);
+  dart.setFieldSignature(input_stream.InputStream, () => ({
+    __proto__: dart.getFields(input_stream.InputStream.__proto__),
+    buffer: dart.fieldType(core.List$(core.int)),
+    offset: dart.fieldType(core.int),
+    start: dart.fieldType(core.int),
+    byteOrder: dart.fieldType(core.int),
+    [__InputStream__length]: dart.fieldType(dart.nullable(core.int)),
+    [__InputStream__length_isSet]: dart.fieldType(core.bool)
+  }));
+  dart.trackLibraries("packages/archive/src/util/input_stream.dart", {
+    "package:archive/src/util/input_stream.dart": input_stream
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["input_stream.dart"],"names":[],"mappings":"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","file":"../../../../../../../../packages/archive/src/util/input_stream.dart.lib.js"}');
+  // Exports:
+  return {
+    src__util__input_stream: input_stream
+  };
+}));
+
+//# sourceMappingURL=input_stream.dart.lib.js.map

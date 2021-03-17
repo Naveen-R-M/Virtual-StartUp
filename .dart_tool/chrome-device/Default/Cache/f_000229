@@ -1,0 +1,1498 @@
+define(['dart_sdk', 'packages/lottie/src/parser/moshi/buffer.dart', 'packages/lottie/src/parser/moshi/json_scope.dart'], (function load__packages__lottie__src__parser__moshi__json_utf8_reader_dart(dart_sdk, packages__lottie__src__parser__moshi__buffer$46dart, packages__lottie__src__parser__moshi__json_scope$46dart) {
+  'use strict';
+  const core = dart_sdk.core;
+  const _internal = dart_sdk._internal;
+  const convert = dart_sdk.convert;
+  const dart = dart_sdk.dart;
+  const dartx = dart_sdk.dartx;
+  const buffer = packages__lottie__src__parser__moshi__buffer$46dart.src__parser__moshi__buffer;
+  const json_scope = packages__lottie__src__parser__moshi__json_scope$46dart.src__parser__moshi__json_scope;
+  var json_utf8_reader = Object.create(dart.library);
+  var json_reader = Object.create(dart.library);
+  var $_set = dartx._set;
+  var $_get = dartx._get;
+  var $codeUnitAt = dartx.codeUnitAt;
+  var $length = dartx.length;
+  var $toString = dartx.toString;
+  var $toDouble = dartx.toDouble;
+  var $isNaN = dartx.isNaN;
+  var $isInfinite = dartx.isInfinite;
+  var $toInt = dartx.toInt;
+  var $truncate = dartx.truncate;
+  var $map = dartx.map;
+  var $toList = dartx.toList;
+  dart._checkModuleNullSafetyMode(false);
+  var T = {
+    VoidToString: () => (T.VoidToString = dart.constFn(dart.fnType(core.String, [])))(),
+    StringTodynamic: () => (T.StringTodynamic = dart.constFn(dart.fnType(dart.dynamic, [core.String])))(),
+    ListOfint: () => (T.ListOfint = dart.constFn(core.List$(core.int)))(),
+    StringN: () => (T.StringN = dart.constFn(dart.nullable(core.String)))(),
+    ListOfStringN: () => (T.ListOfStringN = dart.constFn(core.List$(T.StringN())))(),
+    StringToListOfint: () => (T.StringToListOfint = dart.constFn(dart.fnType(T.ListOfint(), [core.String])))(),
+    TokenL: () => (T.TokenL = dart.constFn(dart.legacy(json_reader.Token)))()
+  };
+  var T$Eval = Object.assign({
+    _: () => T$Eval
+  }, T);
+  var S = {
+    _: () => S
+  };
+  var S$Eval = Object.assign({
+    _: () => S$Eval
+  }, S);
+  const CT = Object.create({
+    _: () => (C, CT)
+  });
+  dart.defineLazy(CT, {
+    get C0() {
+      return C[0] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.beginArray",
+        index: 0
+      });
+    },
+    get C1() {
+      return C[1] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.endArray",
+        index: 1
+      });
+    },
+    get C2() {
+      return C[2] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.beginObject",
+        index: 2
+      });
+    },
+    get C3() {
+      return C[3] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.endObject",
+        index: 3
+      });
+    },
+    get C4() {
+      return C[4] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.name",
+        index: 4
+      });
+    },
+    get C5() {
+      return C[5] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.string",
+        index: 5
+      });
+    },
+    get C6() {
+      return C[6] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.number",
+        index: 6
+      });
+    },
+    get C7() {
+      return C[7] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.boolean",
+        index: 7
+      });
+    },
+    get C8() {
+      return C[8] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.nullToken",
+        index: 8
+      });
+    },
+    get C9() {
+      return C[9] = dart.const({
+        __proto__: json_reader.Token.prototype,
+        [_name$]: "Token.endDocument",
+        index: 9
+      });
+    },
+    get C10() {
+      return C[10] = dart.constList([C[0] || CT.C0, C[1] || CT.C1, C[2] || CT.C2, C[3] || CT.C3, C[4] || CT.C4, C[5] || CT.C5, C[6] || CT.C6, C[7] || CT.C7, C[8] || CT.C8, C[9] || CT.C9], T.TokenL());
+    }
+  }, false);
+  var C = Array(11).fill(void 0);
+  var I = [
+    "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/lottie-1.0.1/lib/src/parser/moshi/json_utf8_reader.dart",
+    "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/lottie-1.0.1/lib/src/parser/moshi/json_reader.dart",
+    "package:lottie/src/parser/moshi/json_reader.dart",
+    "package:lottie/src/parser/moshi/json_utf8_reader.dart"
+  ];
+  var buffer$ = dart.privateName(json_utf8_reader, "JsonUtf8Reader.buffer");
+  var _peeked = dart.privateName(json_utf8_reader, "_peeked");
+  var __JsonUtf8Reader__peekedLong = dart.privateName(json_utf8_reader, "_#JsonUtf8Reader#_peekedLong");
+  var __JsonUtf8Reader__peekedLong_isSet = dart.privateName(json_utf8_reader, "_#JsonUtf8Reader#_peekedLong#isSet");
+  var __JsonUtf8Reader__peekedNumberLength = dart.privateName(json_utf8_reader, "_#JsonUtf8Reader#_peekedNumberLength");
+  var __JsonUtf8Reader__peekedNumberLength_isSet = dart.privateName(json_utf8_reader, "_#JsonUtf8Reader#_peekedNumberLength#isSet");
+  var _peekedString = dart.privateName(json_utf8_reader, "_peekedString");
+  var _peekedLong = dart.privateName(json_utf8_reader, "_peekedLong");
+  var _peekedNumberLength = dart.privateName(json_utf8_reader, "_peekedNumberLength");
+  var _doPeek = dart.privateName(json_utf8_reader, "_doPeek");
+  var _nextNonWhitespace = dart.privateName(json_utf8_reader, "_nextNonWhitespace");
+  var _checkLenient = dart.privateName(json_utf8_reader, "_checkLenient");
+  var _nextQuotedValue = dart.privateName(json_utf8_reader, "_nextQuotedValue");
+  var _findName = dart.privateName(json_utf8_reader, "_findName");
+  var _skipToEndOfBlockComment = dart.privateName(json_utf8_reader, "_skipToEndOfBlockComment");
+  var _skipToEndOfLine = dart.privateName(json_utf8_reader, "_skipToEndOfLine");
+  var stackSize = dart.privateName(json_reader, "JsonReader.stackSize");
+  var scopes = dart.privateName(json_reader, "JsonReader.scopes");
+  var pathNames = dart.privateName(json_reader, "JsonReader.pathNames");
+  var pathIndices = dart.privateName(json_reader, "JsonReader.pathIndices");
+  var lenient = dart.privateName(json_reader, "JsonReader.lenient");
+  var failOnUnknown = dart.privateName(json_reader, "JsonReader.failOnUnknown");
+  json_reader.JsonReader = class JsonReader extends core.Object {
+    get stackSize() {
+      return this[stackSize];
+    }
+    set stackSize(value) {
+      this[stackSize] = value;
+    }
+    get scopes() {
+      return this[scopes];
+    }
+    set scopes(value) {
+      this[scopes] = value;
+    }
+    get pathNames() {
+      return this[pathNames];
+    }
+    set pathNames(value) {
+      this[pathNames] = value;
+    }
+    get pathIndices() {
+      return this[pathIndices];
+    }
+    set pathIndices(value) {
+      this[pathIndices] = value;
+    }
+    get lenient() {
+      return this[lenient];
+    }
+    set lenient(value) {
+      this[lenient] = value;
+    }
+    get failOnUnknown() {
+      return this[failOnUnknown];
+    }
+    set failOnUnknown(value) {
+      this[failOnUnknown] = value;
+    }
+    static fromBytes(source) {
+      if (source == null) dart.nullFailed(I[1], 170, 41, "source");
+      return new json_utf8_reader.JsonUtf8Reader.new(new buffer.Buffer.new(source));
+    }
+    static _copyOf(T, source, newSize, fill) {
+      if (source == null) dart.nullFailed(I[1], 174, 37, "source");
+      if (newSize == null) dart.nullFailed(I[1], 174, 49, "newSize");
+      let newList = core.List$(T).filled(newSize, fill);
+      core.List.copyRange(T, newList, 0, source);
+      return newList;
+    }
+    pushScope(newTop) {
+      let t10;
+      if (newTop == null) dart.nullFailed(I[1], 180, 22, "newTop");
+      if (this.stackSize == this.scopes[$length]) {
+        if (this.stackSize === 256) {
+          dart.throw(new json_reader.JsonDataException.new("Nesting too deep at " + dart.str(this.getPath())));
+        }
+        this.scopes = json_reader.JsonReader._copyOf(core.int, this.scopes, dart.notNull(this.scopes[$length]) * 2, 0);
+        this.pathNames = json_reader.JsonReader._copyOf(T.StringN(), this.pathNames, dart.notNull(this.pathNames[$length]) * 2, null);
+        this.pathIndices = json_reader.JsonReader._copyOf(core.int, this.pathIndices, dart.notNull(this.pathIndices[$length]) * 2, 0);
+      }
+      this.scopes[$_set]((t10 = this.stackSize, this.stackSize = dart.notNull(t10) + 1, t10), newTop);
+    }
+    syntaxError(message) {
+      if (message == null) dart.nullFailed(I[1], 194, 44, "message");
+      dart.throw(new json_reader.JsonEncodingException.new(dart.str(message) + " at path " + dart.str(this.getPath())));
+    }
+    getPath() {
+      return json_scope.JsonScope.getPath(this.stackSize, this.scopes, this.pathNames, this.pathIndices);
+    }
+  };
+  (json_reader.JsonReader.new = function() {
+    this[stackSize] = 0;
+    this[scopes] = T.ListOfint().filled(32, 0);
+    this[pathNames] = T.ListOfStringN().filled(32, null);
+    this[pathIndices] = T.ListOfint().filled(32, 0);
+    this[lenient] = false;
+    this[failOnUnknown] = false;
+    ;
+  }).prototype = json_reader.JsonReader.prototype;
+  dart.addTypeTests(json_reader.JsonReader);
+  dart.addTypeCaches(json_reader.JsonReader);
+  dart.setMethodSignature(json_reader.JsonReader, () => ({
+    __proto__: dart.getMethods(json_reader.JsonReader.__proto__),
+    pushScope: dart.fnType(dart.void, [core.int]),
+    syntaxError: dart.fnType(json_reader.JsonEncodingException, [core.String]),
+    getPath: dart.fnType(core.String, [])
+  }));
+  dart.setLibraryUri(json_reader.JsonReader, I[2]);
+  dart.setFieldSignature(json_reader.JsonReader, () => ({
+    __proto__: dart.getFields(json_reader.JsonReader.__proto__),
+    stackSize: dart.fieldType(core.int),
+    scopes: dart.fieldType(core.List$(core.int)),
+    pathNames: dart.fieldType(core.List$(dart.nullable(core.String))),
+    pathIndices: dart.fieldType(core.List$(core.int)),
+    lenient: dart.fieldType(core.bool),
+    failOnUnknown: dart.fieldType(core.bool)
+  }));
+  json_utf8_reader.JsonUtf8Reader = class JsonUtf8Reader extends json_reader.JsonReader {
+    get buffer() {
+      return this[buffer$];
+    }
+    set buffer(value) {
+      super.buffer = value;
+    }
+    get [_peekedLong]() {
+      let t0;
+      return dart.test(this[__JsonUtf8Reader__peekedLong_isSet]) ? (t0 = this[__JsonUtf8Reader__peekedLong], t0) : dart.throw(new _internal.LateError.fieldNI("_peekedLong"));
+    }
+    set [_peekedLong](t0) {
+      if (t0 == null) dart.nullFailed(I[0], 61, 12, "null");
+      this[__JsonUtf8Reader__peekedLong_isSet] = true;
+      this[__JsonUtf8Reader__peekedLong] = t0;
+    }
+    get [_peekedNumberLength]() {
+      let t1;
+      return dart.test(this[__JsonUtf8Reader__peekedNumberLength_isSet]) ? (t1 = this[__JsonUtf8Reader__peekedNumberLength], t1) : dart.throw(new _internal.LateError.fieldNI("_peekedNumberLength"));
+    }
+    set [_peekedNumberLength](t1) {
+      if (t1 == null) dart.nullFailed(I[0], 64, 12, "null");
+      this[__JsonUtf8Reader__peekedNumberLength_isSet] = true;
+      this[__JsonUtf8Reader__peekedNumberLength] = t1;
+    }
+    beginArray() {
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      if (p === 3) {
+        this.pushScope(1);
+        this.pathIndices[$_set](dart.notNull(this.stackSize) - 1, 0);
+        this[_peeked] = 0;
+      } else {
+        dart.throw(new json_reader.JsonDataException.new("Expected BEGIN_ARRAY but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+    }
+    endArray() {
+      let t3, t2;
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      if (p === 4) {
+        this.stackSize = dart.notNull(this.stackSize) - 1;
+        t2 = this.pathIndices;
+        t3 = dart.notNull(this.stackSize) - 1;
+        t2[$_set](t3, dart.notNull(t2[$_get](t3)) + 1);
+        this[_peeked] = 0;
+      } else {
+        dart.throw(new json_reader.JsonDataException.new("Expected END_ARRAY but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+    }
+    beginObject() {
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      if (p === 1) {
+        this.pushScope(3);
+        this[_peeked] = 0;
+      } else {
+        dart.throw(new json_reader.JsonDataException.new("Expected BEGIN_OBJECT but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+    }
+    endObject() {
+      let t3, t2;
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      if (p === 2) {
+        this.stackSize = dart.notNull(this.stackSize) - 1;
+        this.pathNames[$_set](this.stackSize, null);
+        t2 = this.pathIndices;
+        t3 = dart.notNull(this.stackSize) - 1;
+        t2[$_set](t3, dart.notNull(t2[$_get](t3)) + 1);
+        this[_peeked] = 0;
+      } else {
+        dart.throw(new json_reader.JsonDataException.new("Expected END_OBJECT but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+    }
+    hasNext() {
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      return p !== 2 && p !== 4 && p !== 18;
+    }
+    peek() {
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      switch (p) {
+        case 1:
+        {
+          return json_reader.Token.beginObject;
+        }
+        case 2:
+        {
+          return json_reader.Token.endObject;
+        }
+        case 3:
+        {
+          return json_reader.Token.beginArray;
+        }
+        case 4:
+        {
+          return json_reader.Token.endArray;
+        }
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        {
+          return json_reader.Token.name_;
+        }
+        case 5:
+        case 6:
+        {
+          return json_reader.Token.boolean;
+        }
+        case 7:
+        {
+          return json_reader.Token.nullToken;
+        }
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        {
+          return json_reader.Token.string;
+        }
+        case 16:
+        case 17:
+        {
+          return json_reader.Token.number;
+        }
+        case 18:
+        {
+          return json_reader.Token.endDocument;
+        }
+        default:
+        {
+          dart.throw(new core.AssertionError.new());
+        }
+      }
+    }
+    [_doPeek]() {
+      let peekStack = this.scopes[$_get](dart.notNull(this.stackSize) - 1);
+      if (peekStack === 1) {
+        this.scopes[$_set](dart.notNull(this.stackSize) - 1, 2);
+      } else if (peekStack === 2) {
+        let c = this[_nextNonWhitespace](true);
+        this.buffer.readByte();
+        switch (c) {
+          case 93:
+          {
+            return this[_peeked] = 4;
+          }
+          case 59:
+          {
+            this[_checkLenient]();
+            break;
+          }
+          case 44:
+          {
+            break;
+          }
+          default:
+          {
+            dart.throw(this.syntaxError("Unterminated array"));
+          }
+        }
+      } else if (peekStack === 3 || peekStack === 5) {
+        this.scopes[$_set](dart.notNull(this.stackSize) - 1, 4);
+        if (peekStack === 5) {
+          let c = this[_nextNonWhitespace](true);
+          this.buffer.readByte();
+          switch (c) {
+            case 125:
+            {
+              return this[_peeked] = 2;
+            }
+            case 59:
+            {
+              this[_checkLenient]();
+              break;
+            }
+            case 44:
+            {
+              break;
+            }
+            default:
+            {
+              dart.throw(this.syntaxError("Unterminated object"));
+            }
+          }
+        }
+        let c = this[_nextNonWhitespace](true);
+        switch (c) {
+          case 34:
+          {
+            this.buffer.readByte();
+            return this[_peeked] = 13;
+          }
+          case 39:
+          {
+            this.buffer.readByte();
+            this[_checkLenient]();
+            return this[_peeked] = 12;
+          }
+          case 125:
+          {
+            if (peekStack !== 5) {
+              this.buffer.readByte();
+              return this[_peeked] = 2;
+            }
+            dart.throw(this.syntaxError("Expected name"));
+          }
+          default:
+          {
+            this[_checkLenient]();
+            if (dart.test(this.isLiteral(c))) {
+              return this[_peeked] = 14;
+            } else {
+              dart.throw(this.syntaxError("Expected name"));
+            }
+          }
+        }
+      } else if (peekStack === 4) {
+        this.scopes[$_set](dart.notNull(this.stackSize) - 1, 5);
+        let c = this[_nextNonWhitespace](true);
+        this.buffer.readByte();
+        switch (c) {
+          case 58:
+          {
+            break;
+          }
+          case 61:
+          {
+            this[_checkLenient]();
+            if (dart.test(this.buffer.request(1)) && this.buffer.getByte(0) === 62) {
+              this.buffer.readByte();
+            }
+            break;
+          }
+          default:
+          {
+            dart.throw(this.syntaxError("Expected ':'"));
+          }
+        }
+      } else if (peekStack === 6) {
+        this.scopes[$_set](dart.notNull(this.stackSize) - 1, 7);
+      } else if (peekStack === 7) {
+        let c = this[_nextNonWhitespace](false);
+        if (c === -1) {
+          return this[_peeked] = 18;
+        } else {
+          this[_checkLenient]();
+        }
+      } else if (peekStack === 8) {
+        dart.throw(new core.StateError.new("JsonReader is closed"));
+      }
+      let c = this[_nextNonWhitespace](true);
+      switch (c) {
+        case 93:
+        case 59:
+        case 44:
+        {
+          if (c === 93) {
+            if (peekStack === 1) {
+              this.buffer.readByte();
+              return this[_peeked] = 4;
+            }
+          }
+          if (peekStack === 1 || peekStack === 2) {
+            this[_checkLenient]();
+            return this[_peeked] = 7;
+          } else {
+            dart.throw(this.syntaxError("Unexpected value"));
+          }
+        }
+        case 39:
+        {
+          this[_checkLenient]();
+          this.buffer.readByte();
+          return this[_peeked] = 8;
+        }
+        case 34:
+        {
+          this.buffer.readByte();
+          return this[_peeked] = 9;
+        }
+        case 91:
+        {
+          this.buffer.readByte();
+          return this[_peeked] = 3;
+        }
+        case 123:
+        {
+          this.buffer.readByte();
+          return this[_peeked] = 1;
+        }
+        default:
+      }
+      let result = this.peekKeyword();
+      if (result !== 0) {
+        return result;
+      }
+      result = this.peekNumber();
+      if (result !== 0) {
+        return result;
+      }
+      if (!dart.test(this.isLiteral(this.buffer.getByte(0)))) {
+        dart.throw(this.syntaxError("Expected value"));
+      }
+      this[_checkLenient]();
+      return this[_peeked] = 10;
+    }
+    peekKeyword() {
+      let c = this.buffer.getByte(0);
+      let keyword = null;
+      let keywordUpper = null;
+      let peeking = null;
+      if (c === 116 || c === 84) {
+        keyword = "true";
+        keywordUpper = "TRUE";
+        peeking = 5;
+      } else if (c === 102 || c === 70) {
+        keyword = "false";
+        keywordUpper = "FALSE";
+        peeking = 6;
+      } else if (c === 110 || c === 78) {
+        keyword = "null";
+        keywordUpper = "NULL";
+        peeking = 7;
+      } else {
+        return 0;
+      }
+      let length = keyword.length;
+      for (let i = 1; i < length; i = i + 1) {
+        if (!dart.test(this.buffer.request(i + 1))) {
+          return 0;
+        }
+        c = this.buffer.getByte(i);
+        if (c !== keyword[$_get](i)[$codeUnitAt](0) && c !== keywordUpper[$_get](i)[$codeUnitAt](0)) {
+          return 0;
+        }
+      }
+      if (dart.test(this.buffer.request(length + 1)) && dart.test(this.isLiteral(this.buffer.getByte(length)))) {
+        return 0;
+      }
+      this.buffer.skip(length);
+      return this[_peeked] = peeking;
+    }
+    peekNumber() {
+      let value = 0;
+      let negative = false;
+      let fitsInLong = true;
+      let last = 0;
+      let i = 0;
+      for (; true; i = i + 1) {
+        if (!dart.test(this.buffer.request(i + 1))) {
+          break;
+        }
+        let c = this.buffer.getByte(i);
+        if (c === 45) {
+          if (last === 0) {
+            negative = true;
+            last = 1;
+            continue;
+          } else if (last === 5) {
+            last = 6;
+            continue;
+          }
+          return 0;
+        } else if (c === 43) {
+          if (last === 5) {
+            last = 6;
+            continue;
+          }
+          return 0;
+        } else if (c === 101 || c === 69) {
+          if (last === 2 || last === 4) {
+            last = 5;
+            continue;
+          }
+          return 0;
+        } else if (c === 46) {
+          if (last === 2) {
+            last = 3;
+            continue;
+          }
+          return 0;
+        } else {
+          if (dart.notNull(c) < 48 || dart.notNull(c) > 57) {
+            if (!dart.test(this.isLiteral(c))) {
+              break;
+            }
+            return 0;
+          }
+          if (last === 1 || last === 0) {
+            value = -(dart.notNull(c) - 48);
+            last = 2;
+          } else if (last === 2) {
+            if (value === 0) {
+              return 0;
+            }
+            let newValue = value * 10 - (dart.notNull(c) - 48);
+            fitsInLong = !!(fitsInLong & (value > dart.notNull(json_utf8_reader.JsonUtf8Reader.minIncompleteInteger) || value === json_utf8_reader.JsonUtf8Reader.minIncompleteInteger && newValue < value));
+            value = newValue;
+          } else if (last === 3) {
+            last = 4;
+          } else if (last === 5 || last === 6) {
+            last = 7;
+          }
+        }
+      }
+      if (last === 2 && fitsInLong && (value !== json_utf8_reader.JsonUtf8Reader.longMinValue || negative) && (value !== 0 || !negative)) {
+        this[_peekedLong] = negative ? value : -value;
+        this.buffer.skip(i);
+        return this[_peeked] = 16;
+      } else if (last === 2 || last === 4 || last === 7) {
+        this[_peekedNumberLength] = i;
+        return this[_peeked] = 17;
+      } else {
+        return 0;
+      }
+    }
+    isLiteral(c) {
+      if (c == null) dart.nullFailed(I[0], 465, 22, "c");
+      switch (c) {
+        case 47:
+        case 92:
+        case 59:
+        case 35:
+        case 61:
+        {
+          this[_checkLenient]();
+          return false;
+        }
+        case 123:
+        case 125:
+        case 91:
+        case 93:
+        case 58:
+        case 44:
+        case 32:
+        case 9:
+        case 12:
+        case 13:
+        case 10:
+        {
+          return false;
+        }
+        default:
+        {
+          return true;
+        }
+      }
+    }
+    nextName() {
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      let result = null;
+      let result$35isSet = false;
+      function result$35get() {
+        return result$35isSet ? result : dart.throw(new _internal.LateError.localNI("result"));
+      }
+      dart.fn(result$35get, T.VoidToString());
+      function result$35set(t5) {
+        if (t5 == null) dart.nullFailed(I[0], 497, 17, "null");
+        result$35isSet = true;
+        return result = t5;
+      }
+      dart.fn(result$35set, T.StringTodynamic());
+      if (p === 14) {
+        result$35set(this.nextUnquotedValue());
+      } else if (p === 13) {
+        result$35set(this[_nextQuotedValue](json_utf8_reader.JsonUtf8Reader.doubleQuoteOrSlash));
+      } else if (p === 12) {
+        result$35set(this[_nextQuotedValue](json_utf8_reader.JsonUtf8Reader.singleQuoteOrSlash));
+      } else if (p === 15) {
+        result$35set(dart.nullCheck(this[_peekedString]));
+      } else {
+        dart.throw(new json_reader.JsonDataException.new("Expected a name but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+      this[_peeked] = 0;
+      this.pathNames[$_set](dart.notNull(this.stackSize) - 1, result$35get());
+      return result$35get();
+    }
+    selectName(options) {
+      if (options == null) dart.nullFailed(I[0], 516, 36, "options");
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      if (dart.notNull(p) < 12 || dart.notNull(p) > 15) {
+        return -1;
+      }
+      if (p === 15) {
+        return this[_findName](this[_peekedString], options);
+      }
+      let result = this.buffer.select(options.doubleQuoteSuffix);
+      if (result !== -1) {
+        this[_peeked] = 0;
+        this.pathNames[$_set](dart.notNull(this.stackSize) - 1, options.strings[$_get](result));
+        return result;
+      }
+      let lastPathName = this.pathNames[$_get](dart.notNull(this.stackSize) - 1);
+      let nextName = this.nextName();
+      result = this[_findName](nextName, options);
+      if (result === -1) {
+        this[_peeked] = 15;
+        this[_peekedString] = nextName;
+        this.pathNames[$_set](dart.notNull(this.stackSize) - 1, lastPathName);
+      }
+      return result;
+    }
+    skipName() {
+      if (dart.test(this.failOnUnknown)) {
+        dart.throw(new json_reader.JsonDataException.new("Cannot skip unexpected " + dart.str(this.peek()) + " at " + dart.str(this.getPath())));
+      }
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      if (p === 14) {
+        this.skipUnquotedValue();
+      } else if (p === 13) {
+        this.skipQuotedValue(json_utf8_reader.JsonUtf8Reader.doubleQuoteOrSlash);
+      } else if (p === 12) {
+        this.skipQuotedValue(json_utf8_reader.JsonUtf8Reader.singleQuoteOrSlash);
+      } else if (p !== 15) {
+        dart.throw(new json_reader.JsonDataException.new("Expected a name but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+      this[_peeked] = 0;
+      this.pathNames[$_set](dart.notNull(this.stackSize) - 1, "null");
+    }
+    [_findName](name, options) {
+      if (options == null) dart.nullFailed(I[0], 579, 49, "options");
+      for (let i = 0, size = options.strings[$length]; i < dart.notNull(size); i = i + 1) {
+        if (name == options.strings[$_get](i)) {
+          this[_peeked] = 0;
+          this.pathNames[$_set](dart.notNull(this.stackSize) - 1, name);
+          return i;
+        }
+      }
+      return -1;
+    }
+    nextString() {
+      let t8, t7;
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      let result = null;
+      if (p === 10) {
+        result = this.nextUnquotedValue();
+      } else if (p === 9) {
+        result = this[_nextQuotedValue](json_utf8_reader.JsonUtf8Reader.doubleQuoteOrSlash);
+      } else if (p === 8) {
+        result = this[_nextQuotedValue](json_utf8_reader.JsonUtf8Reader.singleQuoteOrSlash);
+      } else if (p === 11) {
+        result = this[_peekedString];
+        this[_peekedString] = null;
+      } else if (p === 16) {
+        result = dart.toString(this[_peekedLong]);
+      } else if (p === 17) {
+        result = this.buffer.readUtf8(this[_peekedNumberLength]);
+      } else {
+        dart.throw(new json_reader.JsonDataException.new("Expected a string but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+      this[_peeked] = 0;
+      t7 = this.pathIndices;
+      t8 = dart.notNull(this.stackSize) - 1;
+      t7[$_set](t8, dart.notNull(t7[$_get](t8)) + 1);
+      return dart.nullCheck(result);
+    }
+    nextBoolean() {
+      let t8, t7, t8$, t7$;
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      if (p === 5) {
+        this[_peeked] = 0;
+        t7 = this.pathIndices;
+        t8 = dart.notNull(this.stackSize) - 1;
+        t7[$_set](t8, dart.notNull(t7[$_get](t8)) + 1);
+        return true;
+      } else if (p === 6) {
+        this[_peeked] = 0;
+        t7$ = this.pathIndices;
+        t8$ = dart.notNull(this.stackSize) - 1;
+        t7$[$_set](t8$, dart.notNull(t7$[$_get](t8$)) + 1);
+        return false;
+      }
+      dart.throw(new json_reader.JsonDataException.new("Expected a boolean but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+    }
+    nextDouble() {
+      let t8, t7, t9, t8$;
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      if (p === 16) {
+        this[_peeked] = 0;
+        t7 = this.pathIndices;
+        t8 = dart.notNull(this.stackSize) - 1;
+        t7[$_set](t8, dart.notNull(t7[$_get](t8)) + 1);
+        return this[_peekedLong][$toDouble]();
+      }
+      if (p === 17) {
+        this[_peekedString] = this.buffer.readUtf8(this[_peekedNumberLength]);
+      } else if (p === 9) {
+        this[_peekedString] = this[_nextQuotedValue](json_utf8_reader.JsonUtf8Reader.doubleQuoteOrSlash);
+      } else if (p === 8) {
+        this[_peekedString] = this[_nextQuotedValue](json_utf8_reader.JsonUtf8Reader.singleQuoteOrSlash);
+      } else if (p === 10) {
+        this[_peekedString] = this.nextUnquotedValue();
+      } else if (p !== 11) {
+        dart.throw(new json_reader.JsonDataException.new("Expected a double but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+      this[_peeked] = 11;
+      let result = null;
+      try {
+        result = core.double.parse(dart.nullCheck(this[_peekedString]));
+      } catch (e) {
+        let _ = dart.getThrown(e);
+        if (core.FormatException.is(_)) {
+          dart.throw(new json_reader.JsonDataException.new("Expected a double but was " + dart.str(this[_peekedString]) + " at path " + dart.str(this.getPath())));
+        } else
+          throw e;
+      }
+      if (!dart.test(this.lenient) && (result[$isNaN] || result[$isInfinite])) {
+        dart.throw(new json_reader.JsonEncodingException.new("JSON forbids NaN and infinities: " + dart.str(result) + " at path " + dart.str(this.getPath())));
+      }
+      this[_peekedString] = null;
+      this[_peeked] = 0;
+      t8$ = this.pathIndices;
+      t9 = dart.notNull(this.stackSize) - 1;
+      t8$[$_set](t9, dart.notNull(t8$[$_get](t9)) + 1);
+      return result;
+    }
+    [_nextQuotedValue](runTerminator) {
+      if (runTerminator == null) dart.nullFailed(I[0], 688, 37, "runTerminator");
+      let builder = null;
+      while (true) {
+        let index = this.buffer.indexOfElement(runTerminator, 0);
+        if (index === -1) dart.throw(this.syntaxError("Unterminated string"));
+        if (this.buffer.getByte(index) === 92) {
+          builder == null ? builder = new core.StringBuffer.new() : null;
+          builder.write(this.buffer.readUtf8(index));
+          this.buffer.readByte();
+          builder.writeCharCode(this.readEscapeCharacter());
+          continue;
+        }
+        if (builder == null) {
+          let result = this.buffer.readUtf8(index);
+          this.buffer.readByte();
+          return result;
+        } else {
+          builder.write(this.buffer.readUtf8(index));
+          this.buffer.readByte();
+          return dart.toString(builder);
+        }
+      }
+    }
+    nextUnquotedValue() {
+      let i = this.buffer.indexOfElement(json_utf8_reader.JsonUtf8Reader.unquotedStringTerminals, 0);
+      return i !== -1 ? this.buffer.readUtf8(i) : this.buffer.readUtf8(this.buffer.size);
+    }
+    skipQuotedValue(runTerminator) {
+      if (runTerminator == null) dart.nullFailed(I[0], 722, 34, "runTerminator");
+      while (true) {
+        let index = this.buffer.indexOfElement(runTerminator, 0);
+        if (index === -1) dart.throw(this.syntaxError("Unterminated string"));
+        if (this.buffer.getByte(index) === 92) {
+          this.buffer.skip(dart.notNull(index) + 1);
+          this.readEscapeCharacter();
+        } else {
+          this.buffer.skip(dart.notNull(index) + 1);
+          return;
+        }
+      }
+    }
+    skipUnquotedValue() {
+      let i = this.buffer.indexOfElement(json_utf8_reader.JsonUtf8Reader.unquotedStringTerminals, 0);
+      this.buffer.skip(i !== -1 ? i : this.buffer.size);
+    }
+    nextInt() {
+      let t9, t8, t9$, t8$, t11, t10;
+      let p = this[_peeked];
+      if (p === 0) {
+        p = this[_doPeek]();
+      }
+      let result = null;
+      if (p === 16) {
+        result = this[_peekedLong];
+        if (this[_peekedLong] != result) {
+          dart.throw(new json_reader.JsonDataException.new("Expected an int but was " + dart.str(this[_peekedLong]) + " at path " + dart.str(this.getPath())));
+        }
+        this[_peeked] = 0;
+        t8 = this.pathIndices;
+        t9 = dart.notNull(this.stackSize) - 1;
+        t8[$_set](t9, dart.notNull(t8[$_get](t9)) + 1);
+        return result;
+      }
+      if (p === 17) {
+        this[_peekedString] = this.buffer.readUtf8(this[_peekedNumberLength]);
+      } else if (p === 9 || p === 8) {
+        this[_peekedString] = p === 9 ? this[_nextQuotedValue](json_utf8_reader.JsonUtf8Reader.doubleQuoteOrSlash) : this[_nextQuotedValue](json_utf8_reader.JsonUtf8Reader.singleQuoteOrSlash);
+        try {
+          result = core.int.parse(dart.nullCheck(this[_peekedString]));
+          this[_peeked] = 0;
+          t8$ = this.pathIndices;
+          t9$ = dart.notNull(this.stackSize) - 1;
+          t8$[$_set](t9$, dart.notNull(t8$[$_get](t9$)) + 1);
+          return result;
+        } catch (e) {
+          let _ = dart.getThrown(e);
+          if (core.FormatException.is(_)) {
+          } else
+            throw e;
+        }
+      } else if (p !== 11) {
+        dart.throw(new json_reader.JsonDataException.new("Expected an int but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+      }
+      this[_peeked] = 11;
+      let asDouble = null;
+      try {
+        asDouble = core.double.parse(dart.nullCheck(this[_peekedString]));
+      } catch (e$) {
+        let _ = dart.getThrown(e$);
+        if (core.FormatException.is(_)) {
+          dart.throw(new json_reader.JsonDataException.new("Expected an int but was " + dart.str(this[_peekedString]) + "  at path " + dart.str(this.getPath())));
+        } else
+          throw e$;
+      }
+      result = asDouble[$toInt]();
+      if (result != asDouble) {
+        dart.throw(new json_reader.JsonDataException.new("Expected an int but was " + dart.str(this[_peekedString]) + " at path " + dart.str(this.getPath())));
+      }
+      this[_peekedString] = null;
+      this[_peeked] = 0;
+      t10 = this.pathIndices;
+      t11 = dart.notNull(this.stackSize) - 1;
+      t10[$_set](t11, dart.notNull(t10[$_get](t11)) + 1);
+      return result;
+    }
+    close() {
+      this[_peeked] = 0;
+      this.scopes[$_set](0, 8);
+      this.stackSize = 1;
+      this.buffer.clear();
+    }
+    skipValue() {
+      let t11, t10;
+      if (dart.test(this.failOnUnknown)) {
+        dart.throw(new json_reader.JsonDataException.new("Cannot skip unexpected " + dart.str(this.peek()) + " at " + dart.str(this.getPath())));
+      }
+      let count = 0;
+      do {
+        let p = this[_peeked];
+        if (p === 0) {
+          p = this[_doPeek]();
+        }
+        if (p === 3) {
+          this.pushScope(1);
+          count = count + 1;
+        } else if (p === 1) {
+          this.pushScope(3);
+          count = count + 1;
+        } else if (p === 4) {
+          count = count - 1;
+          if (count < 0) {
+            dart.throw(new json_reader.JsonDataException.new("Expected a value but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+          }
+          this.stackSize = dart.notNull(this.stackSize) - 1;
+        } else if (p === 2) {
+          count = count - 1;
+          if (count < 0) {
+            dart.throw(new json_reader.JsonDataException.new("Expected a value but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+          }
+          this.stackSize = dart.notNull(this.stackSize) - 1;
+        } else if (p === 14 || p === 10) {
+          this.skipUnquotedValue();
+        } else if (p === 9 || p === 13) {
+          this.skipQuotedValue(json_utf8_reader.JsonUtf8Reader.doubleQuoteOrSlash);
+        } else if (p === 8 || p === 12) {
+          this.skipQuotedValue(json_utf8_reader.JsonUtf8Reader.singleQuoteOrSlash);
+        } else if (p === 17) {
+          this.buffer.skip(this[_peekedNumberLength]);
+        } else if (p === 18) {
+          dart.throw(new json_reader.JsonDataException.new("Expected a value but was " + dart.str(this.peek()) + " at path " + dart.str(this.getPath())));
+        }
+        this[_peeked] = 0;
+      } while (count !== 0);
+      t10 = this.pathIndices;
+      t11 = dart.notNull(this.stackSize) - 1;
+      t10[$_set](t11, dart.notNull(t10[$_get](t11)) + 1);
+      this.pathNames[$_set](dart.notNull(this.stackSize) - 1, "null");
+    }
+    [_nextNonWhitespace](throwOnEof) {
+      let t10;
+      if (throwOnEof == null) dart.nullFailed(I[0], 864, 31, "throwOnEof");
+      let p = 0;
+      while (dart.test(this.buffer.request(p + 1))) {
+        let c = this.buffer.getByte((t10 = p, p = t10 + 1, t10));
+        if (c === 10 || c === 32 || c === 13 || c === 9) {
+          continue;
+        }
+        this.buffer.skip(p - 1);
+        if (c === 47) {
+          if (!dart.test(this.buffer.request(2))) {
+            return c;
+          }
+          this[_checkLenient]();
+          let peek = this.buffer.getByte(1);
+          switch (peek) {
+            case 42:
+            {
+              this.buffer.readByte();
+              this.buffer.readByte();
+              if (!dart.test(this[_skipToEndOfBlockComment]())) {
+                dart.throw(this.syntaxError("Unterminated comment"));
+              }
+              p = 0;
+              continue;
+            }
+            case 47:
+            {
+              this.buffer.readByte();
+              this.buffer.readByte();
+              this[_skipToEndOfLine]();
+              p = 0;
+              continue;
+            }
+            default:
+            {
+              return c;
+            }
+          }
+        } else if (c === 35) {
+          this[_checkLenient]();
+          this[_skipToEndOfLine]();
+          p = 0;
+        } else {
+          return c;
+        }
+      }
+      if (dart.test(throwOnEof)) {
+        dart.throw(new core.StateError.new("End of input"));
+      } else {
+        return -1;
+      }
+    }
+    [_checkLenient]() {
+      if (!dart.test(this.lenient)) {
+        dart.throw(this.syntaxError("Use JsonReader.setLenient(true) to accept malformed JSON"));
+      }
+    }
+    [_skipToEndOfLine]() {
+      let index = this.buffer.indexOfElement(json_utf8_reader.JsonUtf8Reader.lineFeedOrCarriageReturn, 0);
+      this.buffer.skip(index !== -1 ? dart.notNull(index) + 1 : this.buffer.size);
+    }
+    [_skipToEndOfBlockComment]() {
+      let index = this.buffer.indexOfBytes(json_utf8_reader.JsonUtf8Reader.closingBlockComment, 0);
+      let found = index !== -1;
+      this.buffer.skip(found ? dart.notNull(index) + dart.notNull(json_utf8_reader.JsonUtf8Reader.closingBlockComment[$length]) : this.buffer.size);
+      return found;
+    }
+    toString() {
+      return "JsonReader(" + dart.str(this.buffer) + ")";
+    }
+    readEscapeCharacter() {
+      if (!dart.test(this.buffer.request(1))) {
+        dart.throw(this.syntaxError("Unterminated escape sequence"));
+      }
+      let escaped = this.buffer.readByte();
+      switch (escaped) {
+        case 117:
+        {
+          if (!dart.test(this.buffer.request(4))) {
+            dart.throw(core.Exception.new("Unterminated escape sequence at path " + dart.str(this.getPath())));
+          }
+          let result = 0;
+          for (let i = 0, end = i + 4; i < end; i = i + 1) {
+            let c = this.buffer.getByte(i);
+            result = result << 4 >>> 0;
+            if (dart.notNull(c) >= 48 && dart.notNull(c) <= 57) {
+              result = result + (dart.notNull(c) - 48);
+            } else if (dart.notNull(c) >= 97 && dart.notNull(c) <= 102) {
+              result = result + (dart.notNull(c) - 97 + 10);
+            } else if (dart.notNull(c) >= 65 && dart.notNull(c) <= 70) {
+              result = result + (dart.notNull(c) - 65 + 10);
+            } else {
+              dart.throw(this.syntaxError("\\u" + dart.str(this.buffer.readUtf8(4))));
+            }
+          }
+          this.buffer.skip(4);
+          return result;
+        }
+        case 116:
+        {
+          return 9;
+        }
+        case 98:
+        {
+          return 8;
+        }
+        case 110:
+        {
+          return 10;
+        }
+        case 114:
+        {
+          return 13;
+        }
+        case 102:
+        {
+          return 12;
+        }
+        case 10:
+        case 39:
+        case 34:
+        case 92:
+        case 47:
+        {
+          return escaped;
+        }
+        default:
+        {
+          if (!dart.test(this.lenient)) dart.throw(this.syntaxError("Invalid escape sequence: \\" + dart.str(escaped)));
+          return escaped;
+        }
+      }
+    }
+  };
+  (json_utf8_reader.JsonUtf8Reader.new = function(buffer) {
+    if (buffer == null) dart.nullFailed(I[0], 71, 23, "buffer");
+    this[_peeked] = 0;
+    this[__JsonUtf8Reader__peekedLong] = null;
+    this[__JsonUtf8Reader__peekedLong_isSet] = false;
+    this[__JsonUtf8Reader__peekedNumberLength] = null;
+    this[__JsonUtf8Reader__peekedNumberLength_isSet] = false;
+    this[_peekedString] = null;
+    this[buffer$] = buffer;
+    json_utf8_reader.JsonUtf8Reader.__proto__.new.call(this);
+    this.pushScope(6);
+  }).prototype = json_utf8_reader.JsonUtf8Reader.prototype;
+  dart.addTypeTests(json_utf8_reader.JsonUtf8Reader);
+  dart.addTypeCaches(json_utf8_reader.JsonUtf8Reader);
+  dart.setMethodSignature(json_utf8_reader.JsonUtf8Reader, () => ({
+    __proto__: dart.getMethods(json_utf8_reader.JsonUtf8Reader.__proto__),
+    beginArray: dart.fnType(dart.void, []),
+    endArray: dart.fnType(dart.void, []),
+    beginObject: dart.fnType(dart.void, []),
+    endObject: dart.fnType(dart.void, []),
+    hasNext: dart.fnType(core.bool, []),
+    peek: dart.fnType(json_reader.Token, []),
+    [_doPeek]: dart.fnType(core.int, []),
+    peekKeyword: dart.fnType(core.int, []),
+    peekNumber: dart.fnType(core.int, []),
+    isLiteral: dart.fnType(core.bool, [core.int]),
+    nextName: dart.fnType(core.String, []),
+    selectName: dart.fnType(core.int, [json_reader.JsonReaderOptions]),
+    skipName: dart.fnType(dart.void, []),
+    [_findName]: dart.fnType(core.int, [dart.nullable(core.String), json_reader.JsonReaderOptions]),
+    nextString: dart.fnType(core.String, []),
+    nextBoolean: dart.fnType(core.bool, []),
+    nextDouble: dart.fnType(core.double, []),
+    [_nextQuotedValue]: dart.fnType(core.String, [core.List$(core.int)]),
+    nextUnquotedValue: dart.fnType(core.String, []),
+    skipQuotedValue: dart.fnType(dart.void, [core.List$(core.int)]),
+    skipUnquotedValue: dart.fnType(dart.void, []),
+    nextInt: dart.fnType(core.int, []),
+    close: dart.fnType(dart.void, []),
+    skipValue: dart.fnType(dart.void, []),
+    [_nextNonWhitespace]: dart.fnType(core.int, [core.bool]),
+    [_checkLenient]: dart.fnType(dart.void, []),
+    [_skipToEndOfLine]: dart.fnType(dart.void, []),
+    [_skipToEndOfBlockComment]: dart.fnType(core.bool, []),
+    readEscapeCharacter: dart.fnType(core.int, [])
+  }));
+  dart.setGetterSignature(json_utf8_reader.JsonUtf8Reader, () => ({
+    __proto__: dart.getGetters(json_utf8_reader.JsonUtf8Reader.__proto__),
+    [_peekedLong]: core.int,
+    [_peekedNumberLength]: core.int
+  }));
+  dart.setSetterSignature(json_utf8_reader.JsonUtf8Reader, () => ({
+    __proto__: dart.getSetters(json_utf8_reader.JsonUtf8Reader.__proto__),
+    [_peekedLong]: core.int,
+    [_peekedNumberLength]: core.int
+  }));
+  dart.setLibraryUri(json_utf8_reader.JsonUtf8Reader, I[3]);
+  dart.setFieldSignature(json_utf8_reader.JsonUtf8Reader, () => ({
+    __proto__: dart.getFields(json_utf8_reader.JsonUtf8Reader.__proto__),
+    buffer: dart.finalFieldType(buffer.Buffer),
+    [_peeked]: dart.fieldType(core.int),
+    [__JsonUtf8Reader__peekedLong]: dart.fieldType(dart.nullable(core.int)),
+    [__JsonUtf8Reader__peekedLong_isSet]: dart.fieldType(core.bool),
+    [__JsonUtf8Reader__peekedNumberLength]: dart.fieldType(dart.nullable(core.int)),
+    [__JsonUtf8Reader__peekedNumberLength_isSet]: dart.fieldType(core.bool),
+    [_peekedString]: dart.fieldType(dart.nullable(core.String))
+  }));
+  dart.defineExtensionMethods(json_utf8_reader.JsonUtf8Reader, ['toString']);
+  dart.defineLazy(json_utf8_reader.JsonUtf8Reader, {
+    /*json_utf8_reader.JsonUtf8Reader.longMinValue*/get longMinValue() {
+      return -9007199254740991;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.minIncompleteInteger*/get minIncompleteInteger() {
+      return (dart.notNull(json_utf8_reader.JsonUtf8Reader.longMinValue) / 10)[$truncate]();
+    },
+    /*json_utf8_reader.JsonUtf8Reader.singleQuoteOrSlash*/get singleQuoteOrSlash() {
+      return convert.utf8.encode("'\\");
+    },
+    /*json_utf8_reader.JsonUtf8Reader.doubleQuoteOrSlash*/get doubleQuoteOrSlash() {
+      return convert.utf8.encode("\"\\");
+    },
+    /*json_utf8_reader.JsonUtf8Reader.unquotedStringTerminals*/get unquotedStringTerminals() {
+      return convert.utf8.encode("{}[]:, \n\t\r\f/\\;#=");
+    },
+    /*json_utf8_reader.JsonUtf8Reader.lineFeedOrCarriageReturn*/get lineFeedOrCarriageReturn() {
+      return convert.utf8.encode("\n\r");
+    },
+    /*json_utf8_reader.JsonUtf8Reader.closingBlockComment*/get closingBlockComment() {
+      return convert.utf8.encode("*/");
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedNone*/get peekedNone() {
+      return 0;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedBeginObject*/get peekedBeginObject() {
+      return 1;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedEndObject*/get peekedEndObject() {
+      return 2;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedBeginArray*/get peekedBeginArray() {
+      return 3;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedEndArray*/get peekedEndArray() {
+      return 4;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedTrue*/get peekedTrue() {
+      return 5;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedFalse*/get peekedFalse() {
+      return 6;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedNull*/get peekedNull() {
+      return 7;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedSingleQuote*/get peekedSingleQuote() {
+      return 8;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedDoubleQuote*/get peekedDoubleQuote() {
+      return 9;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedUnquoted*/get peekedUnquoted() {
+      return 10;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedBuffered*/get peekedBuffered() {
+      return 11;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedSingleQuotedName*/get peekedSingleQuotedName() {
+      return 12;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedDoubleQuotedName*/get peekedDoubleQuotedName() {
+      return 13;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedUnquotedName*/get peekedUnquotedName() {
+      return 14;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedBufferedName*/get peekedBufferedName() {
+      return 15;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedLong*/get peekedLong() {
+      return 16;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedNumber*/get peekedNumber() {
+      return 17;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.peekedEof*/get peekedEof() {
+      return 18;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.numberCharNone*/get numberCharNone() {
+      return 0;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.numberCharSign*/get numberCharSign() {
+      return 1;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.numberCharDigit*/get numberCharDigit() {
+      return 2;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.numberCharDecimal*/get numberCharDecimal() {
+      return 3;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.numberCharFractionDigit*/get numberCharFractionDigit() {
+      return 4;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.numberCharExpE*/get numberCharExpE() {
+      return 5;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.numberCharExpSign*/get numberCharExpSign() {
+      return 6;
+    },
+    /*json_utf8_reader.JsonUtf8Reader.numberCharExpDigit*/get numberCharExpDigit() {
+      return 7;
+    }
+  }, false);
+  var strings$ = dart.privateName(json_reader, "JsonReaderOptions.strings");
+  var doubleQuoteSuffix$ = dart.privateName(json_reader, "JsonReaderOptions.doubleQuoteSuffix");
+  json_reader.JsonReaderOptions = class JsonReaderOptions extends core.Object {
+    get strings() {
+      return this[strings$];
+    }
+    set strings(value) {
+      super.strings = value;
+    }
+    get doubleQuoteSuffix() {
+      return this[doubleQuoteSuffix$];
+    }
+    set doubleQuoteSuffix(value) {
+      super.doubleQuoteSuffix = value;
+    }
+    static of(strings) {
+      if (strings == null) dart.nullFailed(I[1], 288, 44, "strings");
+      return new json_reader.JsonReaderOptions.new(strings, strings[$map](T.ListOfint(), dart.fn(s => {
+        if (s == null) dart.nullFailed(I[1], 290, 31, "s");
+        return convert.utf8.encode(dart.str(s) + "\"");
+      }, T.StringToListOfint()))[$toList]());
+    }
+  };
+  (json_reader.JsonReaderOptions.new = function(strings, doubleQuoteSuffix) {
+    if (strings == null) dart.nullFailed(I[1], 286, 26, "strings");
+    if (doubleQuoteSuffix == null) dart.nullFailed(I[1], 286, 40, "doubleQuoteSuffix");
+    this[strings$] = strings;
+    this[doubleQuoteSuffix$] = doubleQuoteSuffix;
+    ;
+  }).prototype = json_reader.JsonReaderOptions.prototype;
+  dart.addTypeTests(json_reader.JsonReaderOptions);
+  dart.addTypeCaches(json_reader.JsonReaderOptions);
+  dart.setLibraryUri(json_reader.JsonReaderOptions, I[2]);
+  dart.setFieldSignature(json_reader.JsonReaderOptions, () => ({
+    __proto__: dart.getFields(json_reader.JsonReaderOptions.__proto__),
+    strings: dart.finalFieldType(core.List$(core.String)),
+    doubleQuoteSuffix: dart.finalFieldType(core.List$(core.List$(core.int)))
+  }));
+  var _name$ = dart.privateName(json_reader, "_name");
+  json_reader.Token = class Token extends core.Object {
+    toString() {
+      return this[_name$];
+    }
+  };
+  (json_reader.Token.new = function(index, _name) {
+    if (index == null) dart.nullFailed(I[1], 295, 6, "index");
+    if (_name == null) dart.nullFailed(I[1], 295, 6, "_name");
+    this.index = index;
+    this[_name$] = _name;
+    ;
+  }).prototype = json_reader.Token.prototype;
+  dart.addTypeTests(json_reader.Token);
+  dart.addTypeCaches(json_reader.Token);
+  dart.setLibraryUri(json_reader.Token, I[2]);
+  dart.setFieldSignature(json_reader.Token, () => ({
+    __proto__: dart.getFields(json_reader.Token.__proto__),
+    index: dart.finalFieldType(core.int),
+    [_name$]: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(json_reader.Token, ['toString']);
+  json_reader.Token.beginArray = C[0] || CT.C0;
+  json_reader.Token.endArray = C[1] || CT.C1;
+  json_reader.Token.beginObject = C[2] || CT.C2;
+  json_reader.Token.endObject = C[3] || CT.C3;
+  json_reader.Token.name_ = C[4] || CT.C4;
+  json_reader.Token.string = C[5] || CT.C5;
+  json_reader.Token.number = C[6] || CT.C6;
+  json_reader.Token.boolean = C[7] || CT.C7;
+  json_reader.Token.nullToken = C[8] || CT.C8;
+  json_reader.Token.endDocument = C[9] || CT.C9;
+  json_reader.Token.values = C[10] || CT.C10;
+  var message$ = dart.privateName(json_reader, "JsonDataException.message");
+  json_reader.JsonDataException = class JsonDataException extends core.Object {
+    get message() {
+      return this[message$];
+    }
+    set message(value) {
+      super.message = value;
+    }
+    toString() {
+      return this.message;
+    }
+  };
+  (json_reader.JsonDataException.new = function(message) {
+    if (message == null) dart.nullFailed(I[1], 338, 26, "message");
+    this[message$] = message;
+    ;
+  }).prototype = json_reader.JsonDataException.prototype;
+  dart.addTypeTests(json_reader.JsonDataException);
+  dart.addTypeCaches(json_reader.JsonDataException);
+  json_reader.JsonDataException[dart.implements] = () => [core.Exception];
+  dart.setLibraryUri(json_reader.JsonDataException, I[2]);
+  dart.setFieldSignature(json_reader.JsonDataException, () => ({
+    __proto__: dart.getFields(json_reader.JsonDataException.__proto__),
+    message: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(json_reader.JsonDataException, ['toString']);
+  var message$0 = dart.privateName(json_reader, "JsonEncodingException.message");
+  json_reader.JsonEncodingException = class JsonEncodingException extends core.Object {
+    get message() {
+      return this[message$0];
+    }
+    set message(value) {
+      super.message = value;
+    }
+    toString() {
+      return this.message;
+    }
+  };
+  (json_reader.JsonEncodingException.new = function(message) {
+    if (message == null) dart.nullFailed(I[1], 347, 30, "message");
+    this[message$0] = message;
+    ;
+  }).prototype = json_reader.JsonEncodingException.prototype;
+  dart.addTypeTests(json_reader.JsonEncodingException);
+  dart.addTypeCaches(json_reader.JsonEncodingException);
+  json_reader.JsonEncodingException[dart.implements] = () => [core.Exception];
+  dart.setLibraryUri(json_reader.JsonEncodingException, I[2]);
+  dart.setFieldSignature(json_reader.JsonEncodingException, () => ({
+    __proto__: dart.getFields(json_reader.JsonEncodingException.__proto__),
+    message: dart.finalFieldType(core.String)
+  }));
+  dart.defineExtensionMethods(json_reader.JsonEncodingException, ['toString']);
+  dart.trackLibraries("packages/lottie/src/parser/moshi/json_utf8_reader.dart", {
+    "package:lottie/src/parser/moshi/json_utf8_reader.dart": json_utf8_reader,
+    "package:lottie/src/parser/moshi/json_reader.dart": json_reader
+  }, {
+  }, '{"version":3,"sourceRoot":"","sources":["json_reader.dart","json_utf8_reader.dart"],"names":[],"mappings":"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","file":"../../../../../../../../../packages/lottie/src/parser/moshi/json_utf8_reader.dart.lib.js"}');
+  // Exports:
+  return {
+    src__parser__moshi__json_utf8_reader: json_utf8_reader,
+    src__parser__moshi__json_reader: json_reader
+  };
+}));
+
+//# sourceMappingURL=json_utf8_reader.dart.lib.js.map

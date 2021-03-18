@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:virtual_startup/Auth/SignUp.dart';
-import 'package:virtual_startup/Home/home.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:virtual_startup/main.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -11,13 +15,25 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final _formkey = GlobalKey<FormState>();
 
-  ProgressDialog _progressDialog;
+  SharedPreferences prefs;
+
   bool loading = false;
 
   bool _togglePassword = false;
   String email = '';
   String password = '';
   String _buttonText = 'Sign In';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initializePrefs();
+  }
+
+  initializePrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   void _visibility() {
     setState(() {
@@ -136,25 +152,48 @@ class _SignInState extends State<SignIn> {
                         child: FlatButton(
                             onPressed: () async {
                               if (_formkey.currentState.validate()) {
-                                _progressDialog.show();
-                                var result = '';
-                                if (result != null) {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  _progressDialog.hide();
+                                final url = '127.0.0.1:5000';
+                                final response = await http.post(
+                                  Uri.http(url, '/signInCall'),
+                                  body: jsonEncode(
+                                    <String, String>{
+                                      'email': email,
+                                      'password': password
+                                    },
+                                  ),
+                                );
+                                if (response != null) {
+                                  var result = await http
+                                      .get(Uri.http(url, '/signInCall'));
+                                  var decodeVal = json.decode(result.body)
+                                      as Map<String, dynamic>;
+                                  if (decodeVal['permitted'] == 1) {
+                                    prefs.setString(
+                                        'user', decodeVal['username']);
+                                  }
+                                  print('object :' + decodeVal['permitted'].toString());
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => Home()));
+                                          builder: (context) => MyApp()));
                                 } else {
-                                  Future.delayed(Duration(milliseconds: 1500))
-                                      .then((value) => _progressDialog.hide());
-                                  setState(() {
-                                    loading = false;
-                                    _progressDialog.update(
-                                      message: "Invalid Information",
-                                    );
-                                  });
+                                  Alert(
+                                    context: context,
+                                    type: AlertType.error,
+                                    title: "ALERT",
+                                    desc: "Invalid SignIn credentials..!",
+                                    buttons: [
+                                      DialogButton(
+                                        child: Text(
+                                          "Back to Login",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
+                                        ),
+                                        onPressed: () => Navigator.pop(context),
+                                        width: 120,
+                                      )
+                                    ],
+                                  ).show();
                                 }
                               }
                             },

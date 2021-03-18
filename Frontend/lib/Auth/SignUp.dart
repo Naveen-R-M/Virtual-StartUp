@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:virtual_startup/Auth/SignIn.dart';
 import 'dart:convert';
 
-import 'package:virtual_startup/Home/home.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';

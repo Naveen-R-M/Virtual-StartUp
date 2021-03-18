@@ -1,3 +1,4 @@
+from aes import Aes
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 import json
@@ -10,6 +11,10 @@ directory = os.path.dirname(os.path.abspath(__file__))
 response = ''
 permitted = 0
 username = ''
+aes = Aes()
+nonce = None
+ciphertext = None
+tag = None
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -45,7 +50,7 @@ def signUpCall():
                 insertQuery = "INSERT INTO signUpDetails VALUES('{username}','{email}','{password}','{phNo}')".format(
                      username=username,
                      email=email,
-                     password=password,
+                     password=ciphertext,
                      phNo=phNo
                     )
                 cursor.execute(insertQuery)

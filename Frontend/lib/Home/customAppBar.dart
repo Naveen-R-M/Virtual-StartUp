@@ -68,7 +68,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ),
               Expanded(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
                       child: Text(
@@ -88,7 +88,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       ),
                     ),
                     SizedBox(
-                      width: 25,
+                      width: 15,
                     ),
                     Expanded(
                       child: Text(
@@ -103,10 +103,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     user == null
                         ? Expanded(
                             child: Container(
-                              decoration: BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                    color: Colors.purple.withOpacity(0.1)),
-                              ]),
+                              decoration: BoxDecoration(
+                                color: Color(0xffFB762F),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                              ),
                               child: RaisedButton(
                                 color: Colors.white,
                                 onPressed: () async {
@@ -151,7 +152,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         ? Expanded(
                             child: Container(
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20)),
+                                color: Color(0xffFB762F),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                              ),
                               child: RaisedButton(
                                 color: Colors.white,
                                 onPressed: () {
@@ -173,9 +177,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         : Expanded(
                             child: Container(
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: RaisedButton(
-                                color: Colors.white,
+                                color: Color(0xffA663E1).withOpacity(0.90),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30)),
+                              ),
+                              child: FlatButton(
                                 onPressed: () {
                                   prefs.remove('user');
                                   Navigator.pushReplacement(
@@ -187,7 +193,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                   width: 120,
                                   height: 45,
                                   child: Center(
-                                    child: Text('Logout'),
+                                    child: Text(
+                                      'Logout',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 ),
                               ),

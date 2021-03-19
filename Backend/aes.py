@@ -22,7 +22,8 @@ class Aes:
             return False
 
 aes = Aes()
-nonce, ciphertext, tag = aes.encrypt("Hello Naveen..")
+nonce, ciphertext, tag = aes.encrypt("asdfjkl;")
+print('nonce,tag',nonce,tag)
 plaintext = aes.decrypt(nonce=nonce, ciphertext=ciphertext, tag=tag)
 print('cipher',ciphertext)
 ciphertext = str(ciphertext)

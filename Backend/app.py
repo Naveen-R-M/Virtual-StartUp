@@ -1,4 +1,3 @@
-from aes import Aes
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 import json
@@ -6,15 +5,14 @@ import json
 import sqlite3
 import os
 
+import hashlib
+
 directory = os.path.dirname(os.path.abspath(__file__))
 
 response = ''
 permitted = 0
 username = ''
-aes = Aes()
-nonce = None
-ciphertext = None
-tag = None
+ciphertext = ''
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -25,6 +23,7 @@ cors = CORS(app)
 def signUpCall():
     global response
     global permitted
+    global ciphertext
 
     connection = sqlite3.connect(directory + '\signUpDetails.db')
     cursor = connection.cursor()
@@ -41,17 +40,19 @@ def signUpCall():
         password = requestData['password']
         phNo = requestData['phNo']
 
+        ciphertext = (hashlib.sha256(password.encode())).hexdigest()
+
         response = f'Welocme {username}'
 
         for i in result:
-            if(i[1]==email and i[2]==password):
+            if(i[1]==email and (hashlib.sha256(i[2].encode())).hexdigest() == ciphertext):
                 permitted = 0
             else:
-                insertQuery = "INSERT INTO signUpDetails VALUES('{username}','{email}','{password}','{phNo}')".format(
+                insertQuery = "INSERT INTO signUpDetails VALUES('{username}','{email}','{ciphertext}','{phNo}')".format(
                      username=username,
                      email=email,
-                     password=ciphertext,
-                     phNo=phNo
+                     ciphertext= ciphertext,
+                     phNo=phNo,
                     )
                 cursor.execute(insertQuery)
                 permitted = 1
@@ -84,12 +85,17 @@ def signInCall():
         requestData = json.loads(requestData.decode('utf-8'))
         email = requestData['email']
         password = requestData['password']
+
+        ciphertext = (hashlib.sha256(password.encode())).hexdigest()
+        
         for i in result:
-            if(i[1] == email and i[2] == password):
+            if((i[1] == email) and (i[2] == ciphertext)):
                 permitted = 1
                 username = i[0]
+                print('verified--------------------')
                 break
             else:
+                print('not verified----------------')
                 permitted = 0
         connection.commit()
         return ""
@@ -104,3 +110,5 @@ def signInCall():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+

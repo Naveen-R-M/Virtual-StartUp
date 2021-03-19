@@ -111,20 +111,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                               child: RaisedButton(
                                 color: Colors.white,
                                 onPressed: () async {
-                                  final url = '127.0.0.1:5000';
-                                  var response = await http
-                                      .get(Uri.http(url, '/signUpCall'));
-
-                                  final decodedVal = json.decode(response.body)
-                                      as Map<String, dynamic>;
-                                  if (decodedVal['cookie'] != null) {
-                                    print('User signed In');
-                                  }
-                                  print('Tapped');
+                                  
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SignUp()));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SignUp(),
+                                    ),
+                                  );
                                 },
                                 child: Expanded(
                                   child: Container(

@@ -44,7 +44,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             boxShadow: [
               BoxShadow(
                   offset: Offset(0, 0),
-                  blurRadius: 7,
+                  blurRadius: 2,
                   color: Colors.purple.withOpacity(0.2))
             ]),
         child: Container(
@@ -111,7 +111,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                               child: RaisedButton(
                                 color: Colors.white,
                                 onPressed: () async {
-                                  
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

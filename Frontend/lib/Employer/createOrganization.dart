@@ -1,4 +1,6 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CreateOrganization extends StatefulWidget {
   @override
@@ -6,6 +8,8 @@ class CreateOrganization extends StatefulWidget {
 }
 
 class _CreateOrganizationState extends State<CreateOrganization> {
+  var proofName = 'Upload your File';
+  final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -60,6 +64,8 @@ class _CreateOrganizationState extends State<CreateOrganization> {
                           height: 20,
                         ),
                         TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           cursorColor: Colors.white,
                           style: TextStyle(
                             color: Colors.white,
@@ -84,6 +90,10 @@ class _CreateOrganizationState extends State<CreateOrganization> {
                           height: 20,
                         ),
                         TextFormField(
+                          controller: _controller,
+                          readOnly: true,
+                          focusNode: FocusNode(),
+                          enableInteractiveSelection: false,
                           cursorColor: Colors.white,
                           style: TextStyle(
                             color: Colors.white,
@@ -92,7 +102,7 @@ class _CreateOrganizationState extends State<CreateOrganization> {
                           decoration: InputDecoration(
                               filled: true,
                               fillColor: Color.fromRGBO(36, 46, 56, 100),
-                              hintText: 'Proof',
+                              hintText: 'Upload your Proof',
                               hintStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromRGBO(255, 255, 255, 100),
@@ -103,7 +113,22 @@ class _CreateOrganizationState extends State<CreateOrganization> {
                                 color: Colors.white,
                               ),
                               suffixIcon: IconButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  var picked =
+                                      await FilePicker.platform.pickFiles();
+                                  print(picked.files.length);
+                                  if (picked != null) {
+                                    setState(
+                                      () {
+                                        _controller.text =
+                                            picked.files.first.name;
+                                        print(_controller.text);
+                                        proofName =
+                                            picked.files.first.name.toString();
+                                      },
+                                    );
+                                  }
+                                },
                                 icon: Icon(
                                   Icons.upload_file,
                                   color: Colors.yellow.withOpacity(0.75),

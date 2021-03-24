@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:virtual_startup/Employer/createOrganization.dart';
 import 'package:virtual_startup/Home/customAppBar.dart';
 
 void main() {
@@ -9,8 +11,30 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   String apiCalls = '';
+  SharedPreferences prefs;
+  var user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initializePrefs();
+  }
+
+  initializePrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      user = prefs.get('user');
+    });
+    print('user : ${user}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +45,6 @@ class MyApp extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomAppBar(),
           Expanded(
             child: Scaffold(
               backgroundColor: Colors.white,
@@ -30,6 +53,7 @@ class MyApp extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      CustomAppBar(),
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 20, right: 20, bottom: 20),
@@ -83,64 +107,78 @@ class MyApp extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SafeArea(
-                        child: Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(20),
-                            padding: EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        gradient: LinearGradient(colors: [
-                                          Colors.purple,
-                                          Colors.deepOrangeAccent,
-                                        ]),
-                                        color: Colors.deepOrangeAccent
-                                            .withOpacity(0.70),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    padding: EdgeInsets.all(60),
-                                    margin: EdgeInsets.all(40),
-                                    child: Center(
-                                      child: Text(
-                                        'Join an Organization',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25),
+                      user != null
+                          ? SafeArea(
+                              child: Expanded(
+                                child: Container(
+                                  margin: EdgeInsets.all(20),
+                                  padding: EdgeInsets.all(20),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Colors.purple,
+                                                  Colors.deepOrangeAccent,
+                                                ]),
+                                                color: Colors.deepOrangeAccent
+                                                    .withOpacity(0.70),
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            padding: EdgeInsets.all(60),
+                                            margin: EdgeInsets.all(40),
+                                            child: Center(
+                                              child: Text(
+                                                'Join an Organization',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 25),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () => Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CreateOrganization())),
+                                          child: Container(
+                                            margin: EdgeInsets.all(40),
+                                            decoration: BoxDecoration(
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Colors.deepOrangeAccent,
+                                                  Colors.purple,
+                                                ]),
+                                                color: Colors.orange
+                                                    .withOpacity(0.70),
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            padding: EdgeInsets.all(60),
+                                            child: Center(
+                                              child: Text(
+                                                'Create an Organization',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 25),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    margin: EdgeInsets.all(40),
-                                    decoration: BoxDecoration(
-                                        gradient: LinearGradient(colors: [
-                                          Colors.deepOrangeAccent,
-                                          Colors.purple,
-                                        ]),
-                                        color: Colors.orange.withOpacity(0.70),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    padding: EdgeInsets.all(60),
-                                    child: Center(
-                                      child: Text(
-                                        'Create an Organization',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                              ),
+                            )
+                          : Container(),
                     ],
                   ),
                 ),

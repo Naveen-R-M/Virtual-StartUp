@@ -107,6 +107,43 @@ def signInCall():
             'permitted': permitted
         })
 
+@app.route('/createOrganizationCall', methods = ['GET','POST'])
+@cross_origin()
+
+def createOrganizationCall():
+
+    global response
+
+    dbName = r'\employerOrganization'
+    connection = sqlite3.connect(directory + dbName)
+    cursor = connection.cursor()
+    
+    if(request.method == 'POST'):
+        requestData = request.data
+        requestData = json.loads(requestData.decode('utf-8'))
+
+        user = requestData['user']
+        organizationName = requestData['organizationName']
+        ideaSynopsis = requestData['ideaSynopsis']
+        base64File = requestData['base64File']
+
+        insertQuery = "INSERT INTO EmployerOrganization VALUES('{user}','{organizationName}','{ideaSynopsis}','{base64File}')".format(
+                user = user,
+                organizationName = organizationName,
+                ideaSynopsis = ideaSynopsis,
+                base64File = base64File
+            )
+        cursor.execute(insertQuery)
+    
+        connection.commit()
+
+        response = 'File Added Successfully'
+
+        return ""
+    else:
+        return jsonify({
+            'response': response,
+        })
 
 if __name__ == "__main__":
     app.run(debug=True)

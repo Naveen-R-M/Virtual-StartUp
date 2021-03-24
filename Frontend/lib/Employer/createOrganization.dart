@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateOrganization extends StatefulWidget {
   @override
@@ -10,6 +16,27 @@ class CreateOrganization extends StatefulWidget {
 class _CreateOrganizationState extends State<CreateOrganization> {
   var proofName = 'Upload your File';
   final _controller = TextEditingController();
+  var organizationName;
+  var ideaSynopsis;
+
+  SharedPreferences prefs;
+  var user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initializePrefs();
+  }
+
+  initializePrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      user = prefs.get('user');
+    });
+    print('user : ${user}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -40,6 +67,7 @@ class _CreateOrganizationState extends State<CreateOrganization> {
                     child: Column(
                       children: [
                         TextFormField(
+                          onChanged: (val) => organizationName = val,
                           cursorColor: Colors.white,
                           style: TextStyle(
                             color: Colors.white,
@@ -64,6 +92,7 @@ class _CreateOrganizationState extends State<CreateOrganization> {
                           height: 20,
                         ),
                         TextFormField(
+                          onChanged: (val) => ideaSynopsis = val,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           cursorColor: Colors.white,
@@ -116,8 +145,29 @@ class _CreateOrganizationState extends State<CreateOrganization> {
                                 onPressed: () async {
                                   var picked =
                                       await FilePicker.platform.pickFiles();
-                                  print(picked.files.length);
+                                  print(picked);
                                   if (picked != null) {
+                                    var base64File =
+                                        base64Encode(picked.files.first.bytes);
+                                    print(picked.files.first.bytes);
+                                    print('base64 Encode:' + base64File);
+                                    final url = '127.0.0.1:5000';
+                                    // var request = await http.MultipartRequest(
+                                    //     'POST', Uri.parse(url));
+                                    // request.files.add(
+                                    //   await http.MultipartFile.fromPath(
+                                    //     'filePath',picked.paths.first
+                                    //   )
+                                    // );
+                                    var result = await http.post(
+                                        Uri.http(
+                                            url, '/createOrganizationCall'),
+                                        body: jsonEncode(<String, String>{
+                                          'user': user,
+                                          'organizationName': organizationName,
+                                          'ideaSynopsis': ideaSynopsis,
+                                          'base64File': base64File,
+                                        }));
                                     setState(
                                       () {
                                         _controller.text =
